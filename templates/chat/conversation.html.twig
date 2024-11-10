@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<section class="chat-section">
+    <div class="container py-5 d-flex flex-column align-items-center justify-content-center">
+
+        <div class="chat-container card shadow-lg p-4 rounded">
+            <div class="chat-header d-flex justify-content-between align-items-center mb-4">
+                <h6 class="mb-0"><mutted>ChatBox {{ conversationId }}</mutted></h6>
+                <a href="{{ path('app_chat') }}" class="btn btn-sm btn-light text-primary">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+            </div>
+
+            <div class="message-list overflow-auto mb-4">
+                {% for message in messages %}
+                    <div class="message-item d-flex col-6 {{ message.receiver != app.user.id ? 'justify-content-end' : 'justify-content-start' }} mb-3">
+                        <div class="message card p-3 rounded-4 {{ message.receiver != app.user.id ? 'gradient-rose-blue text-white' : 'gradient-violet-rose' }} shadow-sm">
+                            <p class="mb-1 text-white"><strong><small>{{ message.receiver != app.user.id ? 'Vous' : message.sender}}:</small></strong></p>
+                            <p class="mb-1 text-white"><small>{{ message.content }}</small></p>
+                            {% if message.thumbnail %}
+                                <p>
+                                    <img src="{{ asset('uploads/message_thumbnail/' ~ message.thumbnail) }}" alt="Pièce jointe" class="rounded shadow-sm" style="max-width: 150px;">
+                                </p>
+                            {% endif %}
+                            <small class="text-white">{{ message.createdAt|date('d/m/Y H:i') }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="message-form">
+                {{ form_start(form, {'attr': {'class': 'd-flex align-items-center'}}) }}
+                    <div class="form-group flex-grow-1 me-2">
+                        {{ form_widget(form.content, {'attr': {'class': 'form-control rounded-pill', 'placeholder': 'Tapez votre message...'}}) }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-icon ms-2 rounded-circle">
+                        <i class="fas fa-paper-plane small"></i>
+                    </button>
+                    <label for="{{ form.thumbnail.vars.id }}" class="btn btn-secondary btn-icon ms-2 rounded-circle">
+                        <i class="fas fa-paperclip small"></i>
+                    </label>
+                    {{ form_widget(form.thumbnail, {'attr': {'class': 'd-none'}}) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    .chat-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, rgba(255,182,193,0.4), rgba(64,224,208,0.4));
+    }
+    .chat-container {
+        width: 100%;
+        max-width: 600px;
+        height: 80vh;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 25px;
+        overflow: hidden;
+    }
+    .chat-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 10px;
+    }
+    .message-list {
+        flex-grow: 1;
+        overflow-y: auto;
+        max-height: calc(100% - 100px);
+    }
+    .message-item {
+        width: 100%;
+    }
+    .message {
+        max-width: 75%;
+        border-radius: 25px;
+    }
+    .message-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-control {
+        padding: 0.6rem 1.2rem;
+    }
+    .btn-icon {
+        font-size: 1.2rem;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-icon i {
+        font-size: 0.9rem;
+    }
+    .gradient-rose-blue {
+    background: linear-gradient(to right, #ff7eb3, #9361f1);
+    }
+    .gradient-violet-rose {
+    background: linear-gradient(to right, #a34cf5, #5b39f1);
+    }
+
+
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const messageList = document.querySelector('.message-list');
+        messageList.scrollTop = messageList.scrollHeight;
+
+        document.querySelectorAll('.btn-icon').forEach(btn => {
+            btn.addEventListener('mouseover', () => btn.classList.add('shadow'));
+            btn.addEventListener('mouseout', () => btn.classList.remove('shadow'));
+        });
+    });
+</script>
+{% endblock %}

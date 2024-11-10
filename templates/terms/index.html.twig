@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contrat d'utilisation{% endblock %}
+
+{% block body %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="shadow p-4" style="width: 1000px;">
+    <h1 class="contract-title text-primary ">Contrat de Licence et Conditions d'Utilisation</h1>
+
+    <div class="contract-section">
+        <h4>1. Introduction</h4>
+        <p>Ce contrat d'utilisation régit les conditions selon lesquelles {{ site_name }} offre des services bancaires en ligne. En accédant ou en utilisant ces services, vous acceptez d'être lié par ce contrat.</p>
+    </div>
+
+    <div class="contract-section">
+        <h4>2. Inscription et Vérification de l'Identité</h4>
+        <p>Lors de votre inscription, vous acceptez de fournir des informations exactes et complètes. Nous vérifierons votre identité par une vérification de l'email, qui doit être complétée pour activer votre compte.</p>
+    </div>
+
+    <div class="contract-section">
+        <h4>3. Confidentialité des Informations</h4>
+        <p>Vous êtes responsable de la confidentialité de votre compte et de vos informations de connexion. Toute activité effectuée sous votre compte sera considérée comme ayant été réalisée par vous-même.</p>
+    </div>
+
+    <div class="contract-section">
+        <h4>4. Sécurité des Transactions</h4>
+        <p>Nous garantissons que toutes les transactions effectuées via notre plateforme sont protégées par des mesures de sécurité robustes. Vous acceptez de respecter nos protocoles de sécurité lors de vos connexions.</p>
+    </div>
+
+    <div class="contract-section">
+        <h4>5. Acceptation des Conditions</h4>
+        <p>En cochant la case « J'accepte les conditions d'utilisation » lors de votre inscription, vous confirmez avoir lu, compris et accepté ce contrat.</p>
+    </div>
+
+    <div class="contract-section">
+        <h4>6. Responsabilité</h4>
+        <p>Nous ne pouvons être tenus responsables des pertes financières causées par une mauvaise utilisation de votre compte ou par des événements imprévus affectant nos services.</p>
+    </div>
+
+    <div class="contract-section">
+        <h4>7. Modifications du Contrat</h4>
+        <p>Nous nous réservons le droit de modifier ces conditions à tout moment. Vous serez informé des changements, et votre utilisation continue des services constitue une acceptation des termes modifiés.</p>
+    </div>
+</div>
+
+</div>
+{% endblock %}

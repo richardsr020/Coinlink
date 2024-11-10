@@ -1,0 +1,92 @@
+{# templates/deposit/deposit.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Dépôt de Fonds{% endblock %}
+
+{% block body %}
+<div class="container mt-5"
+    style="background: linear-gradient(to right, #ffcccb, #e0f7fa); padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); height: 600px;">
+    <div class="d-flex justify-content-start mb-3">
+        <a href="{{ path('app_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Retour
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 h-100">
+                <h4 class="text-center mb-4"><i class="fas fa-search"></i> Rechercher un utilisateur</h4>
+
+                {# Affiche le formulaire de recherche #}
+                {{ form_start(form, {'attr': {'class': 'form-inline justify-content-center'}}) }}
+                <div class="input-group mb-3">
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Entrez l\'email de l\'utilisateur'}}) }}
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+
+                {# Résultat de la recherche #}
+                {% if user %}
+                <div class="alert alert-success mt-4" style="border-radius: 15px;">
+                    <h5><i class="fas fa-user-check"></i> Utilisateur trouvé</h5>
+                    <div class="card mt-3">
+                        <div class="card-body d-flex justify-content-between">
+                            <div>
+                                <p><strong>Nom :</strong> {{ user.name }}</p>
+                                <p><strong>Email :</strong> {{ user.email }}</p>
+                            </div>
+                            <a href="" class="btn btn-primary">
+                                <i class="fas fa-comments"></i> Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                {# Affiche le message d'erreur si l'utilisateur n'est pas trouvé #}
+                {% if error %}
+                <div class="alert alert-danger mt-4">
+                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4 h-100"
+                style="background: linear-gradient(to right, #ffcccb, #e0f7fa); border-radius: 15px;">
+                <h4 class="text-center mb-4"><i class="fas fa-history"></i> Conversations récentes</h4>
+                <div class="list-group">
+                    {% for conversation in recentChat %}
+                        {% set isSender = (conversation.sender.id == app.user.id) %}
+                        {% set userId = isSender ? conversation.receiver.id : conversation.sender.id %}
+                        
+                        <a href="{{ path('chat_conversation', {'userId': userId}) }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="mb-1">
+                                        <strong>{{ isSender ? 'À' : 'De' }} {{ isSender ? conversation.receiver.name : conversation.sender.name
+                                            }}</strong>
+                                    </p>
+                                    <small class="text-muted">
+                                        {{ isSender ? 'Envoyé' : 'Reçu' }} : {{ conversation.content }}
+                                    </small>
+                                </div>
+                                <small class="text-muted">{{ conversation.createdAt|date('d/m/Y H:i') }}</small>
+                            </div>
+                        </a>
+                        {% else %}
+                        <p class="text-center text-muted">Aucune conversation récente</p>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

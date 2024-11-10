@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'inscrire {% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="shadow p-4" style="width: 500px;">
+        <h3 class="text-center mb-4">S'incrire </h3>
+        {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+            <div class="form-group">
+                {{ form_row(form.name, {'attr': {'class': 'form-control border-0'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.lastname, {'attr': {'class': 'form-control border-0'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.email, {'attr': {'class': 'form-control border-0'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.password, {'attr': {'class': 'form-control border-0'}}) }}
+            </div>
+            <br>
+            <div class="form-group">
+                <small class="form-text text-muted">
+                    En enregistrant, vous acceptez nos <a href="{{ path('app_terms') }}">conditions d'utilisation</a>.
+                </small>
+            </div>
+            <br>
+           
+            <button type="submit" class="btn btn-primary btn-block">Engistre</button>
+            
+            <br>
+            <div class="container d-flex justify-content-center align-items-center">
+                <small class="form-text text-muted">
+                    Vous avez déjà un compte <a href="{{ path('app_login') }}" >se Connecter </a>.
+                </small>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
