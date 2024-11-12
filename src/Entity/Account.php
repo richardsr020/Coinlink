@@ -26,6 +26,9 @@ class Account
     #[ORM\Column]
     private ?\DateTimeImmutable $createdat = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $accounthash = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Account
     public function setCreatedat(\DateTimeImmutable $createdat): static
     {
         $this->createdat = $createdat;
+
+        return $this;
+    }
+
+    public function getAccounthash(): ?string
+    {
+        return $this->accounthash;
+    }
+
+    public function setAccounthash(?string $accounthash): static
+    {
+        $this->accounthash = $accounthash;
 
         return $this;
     }

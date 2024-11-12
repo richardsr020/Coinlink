@@ -1,0 +1,51 @@
+{# templates/dashboard/set_pin.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Définir un code PIN{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h3 class="text-center text-muted">Définir votre Code PIN</h3>
+        <p class="text-center text-muted small mt-3">
+            Votre code PIN est une mesure de sécurité essentielle pour autoriser les transactions
+             sur votre compte. Veillez à choisir un code facile à mémoriser mais difficile à 
+             deviner par d’autres. Assurez-vous de le noter dans un endroit sécurisé,
+              car nous ne conservons pas votre code pour des raisons de confidentialité et
+               de sécurité. Si vous l’oubliez, vous devrez le réinitialiser pour accéder
+                aux fonctionnalités protégées
+        </p>
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card border-0 shadow p-4" style="background-color: rgba(255, 255, 255, 0.2);">
+                    <div class="card-body">
+                        {{ form_start(pinForm) }}
+                            {{ form_row(pinForm.pin, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Définir le code PIN</button>
+                        {{ form_end(pinForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #ffdee9, #b5fffc);
+        }
+        .text-muted {
+            color: #666;
+        }
+        .small {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .card {
+            background-color: transparent;
+            border-radius: 8px;
+        }
+        .form-control-sm {
+            font-size: 0.9rem;
+        }
+    </style>
+{% endblock %}

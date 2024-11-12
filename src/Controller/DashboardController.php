@@ -5,10 +5,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\PinType;
 use App\Service\UserDashboardService;
 use App\Service\NotificationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
@@ -34,7 +36,7 @@ class DashboardController extends AbstractController
         //dd($notifications);
         // Appeler le service pour obtenir les données du dashboard
         $dashboardData = $this->dashboardService->getUserDashboardData($user);
-        //dd($dashboardData);
+        dd($dashboardData);
         return $this->render('dashboard/index.html.twig', [
             'dashboard' => $dashboardData,
             'notifications' => $notifications,

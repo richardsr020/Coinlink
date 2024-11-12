@@ -35,52 +35,7 @@ class TransactionController extends AbstractController
   
         return $this->render('transaction/deposit.html.twig');
     }
-
-    // #[Route('dashboard/transfer', name: 'app_transfer')]
-    // public function transfer(Request $request): Response
-    // {
-    //     $form = $this->createForm(TransferType::class);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $data = $form->getData();
-    //         // Récupérer l'utilisateur connecté
-    //         $user = $this->getUser();
-
-    //         // Récupérer le compte associé à l'utilisateur connecté
-    //         $fromAccount = $this->em->getRepository(Account::class)->findOneBy(['userid' => $user]);
-
-    //         $toAccount = $this->em->getRepository(Account::class)->find($data->getToaccountid());
-    //         $amount = $data->getAmount();
-        
-
-    //         // Création d'une nouvelle transaction pour le transfert
-    //         $transaction = new Transaction();
-    //         $transaction->setAccountid($fromAccount->getId());
-    //         $transaction->setToAccountid($toAccount->getId());
-    //         $transaction->setAmount($amount);
-    //         $transaction->setTransactiondate(new \DateTimeImmutable());
-    //         $transaction->setDescription('Transfert entre comptes');
-
-    //         // Génération du hash pour la transaction
-    //         $hash = $this->hashGenerator->generateHash($transaction->getAccountid(), $transaction->getAmount(), $transaction->getTransactiondate(), $transaction->getDescription());
-    //         $transaction->setHash($hash.$transaction->getToaccountid());
-
-    //         // Appel du service pour traiter le transfert
-    //         $this->transferService->handleTransfer($fromAccount, $toAccount, $amount, $hash);
-
-    //         // Sauvegarde de la transaction avec le hash dans la base de données
-    //         // $this->em->persist($transaction);
-    //         // $this->em->flush();
-
-    //         $this->addFlash('success', 'Transfert effectué avec succès.');
-    //         return $this->redirectToRoute('app_dashboard');
-    //     }
-
-    //     return $this->render('transaction/transfer.html.twig', [
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
+    
 
     #[Route('dashboard/transfer', name: 'app_transfer')]
     public function transfer(Request $request): Response

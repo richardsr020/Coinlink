@@ -27,32 +27,12 @@ class UserDashboardService
 
         // Récupérer la balance actuelle
         $balance = $account->getBalance();
+        $accounthash = $account->getAccounthash();
 
         // Récupérer l'historique des transactions (du plus récent au plus ancien)
         $transactions = $this->transactionRepository->findByAccount($account->getId());
 
-        // Calculer les dépenses sur une semaine (7 jours)
-        $weekAgo = new \DateTimeImmutable('-7 days');
-        $expenses = $this->transactionRepository->createQueryBuilder('t')
-            ->select('SUM(t.amount)')
-            ->where('t.accountid = :account')
-            ->andWhere('t.amount < 0') // Dépenses négatives
-            ->andWhere('t.transactiondate > :weekAgo')
-            ->setParameter('account', $account->getId())
-            ->setParameter('weekAgo', $weekAgo)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        // Calculer les encaissements (dépôts compris) sur une semaine
-        $income = $this->transactionRepository->createQueryBuilder('t')
-            ->select('SUM(t.amount)')
-            ->where('t.accountid = :account')
-            ->andWhere('t.amount > 0') // Encaissements positifs
-            ->andWhere('t.transactiondate > :weekAgo')
-            ->setParameter('account', $account->getId())
-            ->setParameter('weekAgo', $weekAgo)
-            ->getQuery()
-            ->getSingleScalarResult();
+    
 
         // Informations utilisateur
         $userInfo = [
@@ -67,9 +47,8 @@ class UserDashboardService
         // Rassembler toutes les données
         return [
             'balance' => $balance,
+            'accounthash'=>$accounthash,
             'transactions' => $transactions,
-            'expenses_week' => $expenses ?: 0,
-            'income_week' => $income ?: 0,
             'userInfo' => $userInfo,
         ];
     }
