@@ -85,6 +85,20 @@
     </style>
 
 <div class="container">
+    {% if dashboard.accounthash is null %}
+    <div class="alert alert-danger d-flex justify-content-between align-items-center"
+        style="border-radius: 0; margin-bottom: 20px; padding: 10px 20px;">
+        <div>
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Attention :</strong> les transaction ne sont pas activées. Veuillez définir un code PIN pour les activer toutes
+            les fonctionnalités.
+        </div>
+        <a href="{{ path('app_setPin') }}" class="btn btn-light btn-sm" style="font-weight: bold;">
+            <i class="fas fa-arrow-right"></i> Définir un PIN
+        </a>
+    </div>
+    {% endif %}
+
   
     <h3 class="mt-5 text-muted"><i class="fas fa-wallet"></i> Dashboard Secure Wallet</h3>
 
@@ -250,12 +264,14 @@
                     <!-- <a href="">
                         <button class="btn btn-light mt-3">Retrait</button>
                     </a> -->
+                    {% if dashboard.accounthash %}
                     <a href="{{ path('app_transfer') }}">
                         <button class="btn btn-light mt-3">Transfer</button>
                     </a>
                     <a href="{{ path('app_deposit') }}">
                         <button class="btn btn-light mt-3">Deposer</button>
                     </a>
+                    {% endif %}
                 </div>
             </div>
 

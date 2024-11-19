@@ -36,7 +36,7 @@ class DashboardController extends AbstractController
         //dd($notifications);
         // Appeler le service pour obtenir les données du dashboard
         $dashboardData = $this->dashboardService->getUserDashboardData($user);
-        dd($dashboardData);
+        //dd($dashboardData);
         return $this->render('dashboard/index.html.twig', [
             'dashboard' => $dashboardData,
             'notifications' => $notifications,

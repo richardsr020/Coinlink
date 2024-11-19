@@ -60,39 +60,5 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[Route('/settings/verifyPin', name: 'app_verifyPin')]
-    public function verifyPin(Request $request, AccountRepository $accountRepository, AccountService $accountService): Response
-    {
-        // Récupère l'utilisateur actuellement connecté
-        $user = $this->getUser();
-
-        // Trouve le compte de l'utilisateur connecté
-        $account = $accountRepository->findOneBy(['userid' => $user]);
-
-        // Vérifie si le compte existe
-        if (!$account) {
-            throw $this->createNotFoundException('Compte introuvable pour cet utilisateur.');
-        }
-
-        // Crée et traite le formulaire
-        $form = $this->createForm(PinType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Récupère le PIN depuis le formulaire
-            $data = $form->getData();
-            $pin = (int)$data['pin'];
-
-            // Vérifie le hash du compte en utilisant le service AccountService
-            if ($accountService->validateAccountHash($account, $pin)) {
-                $this->addFlash('success', 'Le code PIN est valide.');
-            } else {
-                $this->addFlash('error', 'Le code PIN est incorrect.');
-            }
-        }
-
-        return $this->render('settings/verifyPin.html.twig', [
-            'pinForm' => $form->createView(),
-        ]);
-    }
+    
 }
