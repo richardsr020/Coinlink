@@ -3,20 +3,24 @@
 {% block title %}Confirmation du transfert{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg p-4" style="width: 500px;">
-        <h3 class="text-center mb-4">Confirmer le transfert</h3>
-        <p><strong>Nom :</strong> {{ name }}</p>
-        <p><strong>Prénom :</strong> {{ lastname }}</p>
-        <p><strong>Email :</strong> {{ email }}</p>
-        <p><strong>Montant :</strong> $ {{ data.amount }}</p>
-        <p><strong>Frais de transaction :</strong> $ {{ fees }}</p>
-        <p><strong>Montant total débité :</strong> $ {{ data.amount + fees }}</p>
+<div class="container d-flex justify-content-center align-items-center vh-100" style="background: linear-gradient(135deg, rgba(255, 192, 203, 0.1), rgba(64, 224, 208, 0.1));">
+    <div class="card shadow-lg p-4" style="width: 500px; background: transparent; border: none;">
+        <h3 class="text-center mb-4" style="font-size: 1.5rem; font-weight: bold;">Confirmer le transfert</h3>
+        
+        <div class="mb-4">
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Nom :</strong> <span style="float: right;">{{ name }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Prénom :</strong> <span style="float: right;">{{ lastname }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Email :</strong> <span style="float: right;">{{ email }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Montant :</strong> <span style="float: right;">$ {{ data.amount }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Frais de transaction :</strong> <span style="float: right;">$ {{ fees }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Montant total débité :</strong> <span style="float: right;">$ {{ data.amount + fees }}</span></p>
+        </div>
 
-        <div class="d-flex justify-content-end mt-4">
-            <a href="{{ path('app_transfer_confirm', {confirm: 'true'}) }}" class="btn btn-success me-2">Confirmer</a>
-            <a href="{{ path('app_transfer_confirm', {confirm: 'false'}) }}" class="btn btn-danger">Annuler</a>
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{{ path('app_transfer_confirm', {confirm: 'true'}) }}" class="btn btn-success me-2" style="font-size: 0.8rem; padding: 5px 15px;">Confirmer</a>
+            <a href="{{ path('app_transfer_confirm', {confirm: 'false'}) }}" class="btn btn-danger" style="font-size: 0.8rem; padding: 5px 15px;">Annuler</a>
         </div>
     </div>
 </div>
 {% endblock %}
+

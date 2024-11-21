@@ -52,6 +52,31 @@ class AccountService
         return $hash;
     }
 
+    public function resetAccountHash(Account $account, int $pin): string
+    {
+        // Réinitialise le hash actuel en supprimant sa valeur
+        $account->setAccounthash(null);
+
+        // Concatène les données de l'utilisateur pour générer un nouveau hash
+        $data = $account->getUserid()->getId()
+                . $account->getAccountnumber()
+                . $account->getCreatedat()->format('Y-m-d H:i:s')
+                . $pin;
+
+        // Génère un nouveau hash en utilisant SHA-256
+        $newHash = hash('sha256', $data);
+
+        // Met à jour l'entité Account avec le nouveau hash
+        $account->setAccounthash($newHash);
+
+        // Persiste et sauvegarde les modifications dans la base de données
+        $this->entityManager->persist($account);
+        $this->entityManager->flush();
+
+        return $newHash;
+    }
+
+
     public function validateAccountHash(Account $account, int $pin): bool
     {
         // Recrée les données et génère un hash

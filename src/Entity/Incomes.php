@@ -14,8 +14,8 @@ class Incomes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $amount = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $amount = null; // DECIMAL stocké comme string en base de données
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdat = null;
@@ -28,14 +28,14 @@ class Incomes
         return $this->id;
     }
 
-    public function getAmount(): ?int
+    public function getAmount(): ?float
     {
-        return $this->amount;
+        return $this->amount !== null ? (float) $this->amount : null;
     }
 
-    public function setAmount(int $amount): static
+    public function setAmount(float $amount): static
     {
-        $this->amount = $amount;
+        $this->amount = number_format($amount, 2, '.', '');
 
         return $this;
     }

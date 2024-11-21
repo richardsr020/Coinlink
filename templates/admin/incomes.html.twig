@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Revenus{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-center my-4">Revenus de la plateforme</h1>
+
+    <!-- Affichage des revenus mensuels -->
+    <h3>Revenus mensuels</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Année</th>
+                <th>Mois</th>
+                <th>Total des Revenus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in monthlyIncomeData %}
+            <tr>
+                <td>{{ row.year }}</td>
+                <td>{{ row.month }}</td>
+                <td>${{ row.totalAmount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Affichage du revenu annuel total -->
+    <h3 class="mt-5">Revenu total annuel</h3>
+    <p><strong>Total des revenus de l'année :</strong> ${{ totalAnnualIncome }}</p>
+</div>
+{% endblock %}

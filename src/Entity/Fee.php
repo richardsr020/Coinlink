@@ -19,11 +19,11 @@ class Fee
     #[ORM\Column]
     private ?int $minamount = null;
 
-    #[ORM\Column]
-    private ?int $feeamount = null;
+    #[ORM\Column(type: 'float')]
+    private ?float $feeamount = null; // Modifié pour un float
 
-    #[ORM\Column]
-    private ?int $feepercentage = null;
+    #[ORM\Column(type: 'float')]
+    private ?float $feepercentage = null; // Modifié pour un float
 
     public function getId(): ?int
     {
@@ -54,24 +54,24 @@ class Fee
         return $this;
     }
 
-    public function getFeeamount(): ?int
+    public function getFeeamount(): ?float
     {
         return $this->feeamount;
     }
 
-    public function setFeeamount(int $feeamount): static
+    public function setFeeamount(float $feeamount): static
     {
         $this->feeamount = $feeamount;
 
         return $this;
     }
 
-    public function getFeepercentage(): ?int
+    public function getFeepercentage(): ?float
     {
         return $this->feepercentage;
     }
 
-    public function setFeepercentage(int $feepercentage): static
+    public function setFeepercentage(float $feepercentage): static
     {
         $this->feepercentage = $feepercentage;
 
