@@ -191,7 +191,7 @@
                     <!-- Liste des cryptos avec bouton d'achat -->
                     <div class="col-12 col-md-4 mb-3">
                         <div class="p-2 border rounded" style="border-radius: 5px;">
-                            <h6 class="text-center" style="font-size: 0.9rem;"><i class="bi bi-currency-bitcoin"></i> Cryptomonnaies
+                            <h6 class="" style="font-size: 0.9rem;"><i class="bi bi-currency-bitcoin"></i> Cryptomonnaies
                             </h6>
                             <ul class="list-group list-group-flush">
                                 {% for crypto in ['Bitcoin', 'Ethereum'] %}
@@ -208,12 +208,21 @@
                 
                     <!-- Emprunt(crédit) -->
                     <div class="col-12 col-md-4 mb-3">
-                        <div class="p-2 text-center border rounded" style="border-radius: 5px;">
-                            <h6 style="font-size: 0.9rem;"><i class="bi bi-wallet2"></i> Emprunt(crédit) </h6>
+                        <div class="p-2 border rounded" style="border-radius: 5px;">
+                            <h6 style="font-size: 0.9rem;"><i class="bi bi-wallet2"></i> Crédit {{ dueAmount ? '<span class="badge bg-danger">1</span>' : '' | raw }}</h6>
+                            {% if dueAmount %}
                             <p style="font-size: 0.8rem;">
                                 <strong>{{ dueAmount }}$</strong>
                                 prélevement dans : <strong>{{ dueDaysInterval }}</strong>
                             </p>
+                            {% else %}
+                                <p style="font-size: 0.8rem;">
+                                Aucun crédit en cours.
+                                </p>
+                                <a href="{{ path('loan_request') }}" class="badge text-white bg-warning nav-link" style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
+                                    <i class="bi bi-cart-plus"></i> Obtenir
+                                </a>
+                            {% endif %}
             
                         </div>
                     </div>

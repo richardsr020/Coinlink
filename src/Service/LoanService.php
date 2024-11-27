@@ -13,12 +13,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class LoanService
 {
     private EntityManagerInterface $em;
+
     
 
-    public function __construct(EntityManagerInterface $em )
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-       
+     
     }
 
     /**
@@ -60,6 +61,7 @@ class LoanService
         $loan->setDuedate($dueDate);
         $loan->setPaid(false);
         $loan->setAcceptedterm(true);
+        $loan->setAccountid($account->getId());
 
         $this->em->persist($loan);
         $this->em->flush();
@@ -68,47 +70,54 @@ class LoanService
     /**
      * Rembourse un prêt existant
      */
-    public function repayLoan(Loan $loan): void
+    public function repayLoan(User $user): void
     {
-        if ($loan->isPaid()) {
-            throw new \Exception("Ce prêt a déjà été remboursé.");
-        }
-
-        $account = $loan->getLoanauthor();
+        // Récupération du compte de l'utilisateur
+        $account = $this->em->getRepository(Account::class)->findOneBy(['userid' => $user->getId()]);
         if (!$account) {
-            throw new \Exception("Compte associé au prêt introuvable.");
+            throw new \RuntimeException("Compte utilisateur introuvable.");
         }
 
-        $balance = $account->getBalance();
-        $loanAmount = $loan->getAmount();
-        $interestAmount = ($loan->getInterestrate()*$loanAmount)/100;
+        // Récupération du prêt actif de l'utilisateur
+        $userLoan = $this->em->getRepository(Loan::class)->findOneBy([
+            'loanauthor' => $account->getId(),
+            'paid' => false
+        ]);
+        if (!$userLoan) {
+            throw new \RuntimeException("Aucun prêt actif correspondant trouvé pour cet utilisateur.");
+        }
+
+        // Calcul des montants
+        $loanAmount = $userLoan->getAmount();
+        $interestAmount = $this->getLoanRules($loanAmount)['interestRate'];
         $totalRepayment = $loanAmount + $interestAmount;
 
         // Vérification de la date d'échéance
         $today = new \DateTimeImmutable();
-        if ($loan->getDuedate() < $today) {
-            throw new \Exception("Date d'échéance dépassée, remboursement non possible.");
+        if ($userLoan->getDuedate() < $today) {
+            throw new \RuntimeException("La date d'échéance du prêt est dépassée. Remboursement impossible.");
         }
 
-        // Vérification du solde suffisant pour rembourser
+        // Vérification du solde du compte
+        $balance = $account->getBalance();
         if ($balance < $totalRepayment) {
-            throw new \Exception("Solde insuffisant pour rembourser le prêt.");
+            throw new \RuntimeException("Solde insuffisant pour rembourser le prêt.");
         }
 
         // Mise à jour du solde du compte
         $account->setBalance($balance - $totalRepayment);
         $this->em->persist($account);
 
-        // Enregistrement de l'intérêt dans Incomesloan
+        // Enregistrement des intérêts comme revenu
         $incomeLoan = new Incomesloan();
-        $incomeLoan->setAccountid($account);
+        $incomeLoan->setAccountid($account); // Vérifiez si cette propriété accepte un objet ou un ID
         $incomeLoan->setAmount($interestAmount);
         $incomeLoan->setCreatedat(new \DateTimeImmutable());
         $this->em->persist($incomeLoan);
 
         // Mise à jour du statut du prêt
-        $loan->setPaid(true);
-        $this->em->persist($loan);
+        $userLoan->setPaid(true);
+        $this->em->persist($userLoan);
 
         // Sauvegarde des modifications
         $this->em->flush();
@@ -148,7 +157,7 @@ class LoanService
         foreach ($loanRules as $rule) {
             if ($amount >= $rule->getMinamount() && $amount <= $rule->getMaxamount()) {
                 return [
-                    'interestRate' => $rule->getInterestrate() / 100, // Taux d'intérêt sous forme décimale
+                    'interestRate' => ($amount * $rule->getInterestrate()) / 100, // Taux d'intérêt sous forme décimale
                     'durationDays' => $rule->getDuration(),
                 ];
             }

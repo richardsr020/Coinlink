@@ -58,11 +58,21 @@ class DashboardController extends AbstractController
 
             //recuperation de la somme due
             $dueAmount = $unpaidLoan->getAmount();
-            $dueDaysInterval = 0;
+        
             if($dueDaysInterval == 0)
             {
-                $this->addFlash('success', 'Emprunt :'.$dueAmount.',Prélevement de encours....');
-                return $this->redirectToRoute('loan_repay');
+                try {
+                    // Utiliser le LoanService pour gérer le remboursement
+                    $this->loanService->repayLoan($user);
+
+                    // Créer une notification après le remboursement
+                    $this->notificationService->createNotification($user,'Prêt remboursé avec succès. Merci pour votre ponctualité.');
+                
+
+                } catch (\Exception $e) {
+                    // Capturer les erreurs générées par LoanService et afficher un message à l'utilisateur
+                    $this->addFlash('error', $e->getMessage());
+                }
             }
         }else{
             $dueAmount = 0;

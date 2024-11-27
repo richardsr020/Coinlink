@@ -115,13 +115,10 @@ class LoanController extends AbstractController
             $this->addFlash('error', 'Aucun compte associé trouvé.');
             return $this->redirectToRoute('loan_request');
         }
-
+        
         // Créer le prêt
         $this->loanService->createLoan($loanData ['amount'],$user);
         
-
-        // Ajouter le montant au compte de l'utilisateur
-        $account->setBalance($account->getBalance() + $loanData['amount']);
 
         $session->remove('loan_data');
 
@@ -134,40 +131,15 @@ class LoanController extends AbstractController
         return $this->redirectToRoute('app_dashboard');
     }
 
-    #[Route('/loan/repay/{id}', name: 'loan_repay')]
-    public function repayLoan(Loan $loan, AccountRepository $accountRepository): Response
+    #[Route('/loan/repay', name: 'loan_repay')]
+
+    public function repayLoan(Request $request): Response
     {
         $user = $this->getUser();
-        $account = $accountRepository->findOneBy(['user' => $user]);
 
-        if (!$account || $loan->getLoanauthor() !== $user) {
-            $this->addFlash('error', 'Action non autorisée.');
-            return $this->redirectToRoute('app_dashboard');
-        }
+       
 
-        $currentDate = new \DateTime();
-        if ($currentDate > $loan->getDuedate()) {
-            $this->addFlash('error', 'La date limite de remboursement est dépassée.');
-            return $this->redirectToRoute('app_dashboard');
-        }
-
-        $totalRepayment = $loan->getAmount() + ($loan->getAmount() * $loan->getInterestRate() / 100);
-        if ($account->getBalance() < $totalRepayment) {
-            $this->addFlash('error', 'Solde insuffisant pour rembourser le prêt.');
-            return $this->redirectToRoute('app_dashboard');
-        }
-
-        // Déduire le remboursement et supprimer le prêt
-        $account->setBalance($account->getBalance() - $totalRepayment);
-        $this->entityManager->remove($loan);
-        $this->entityManager->flush();
-
-        $this->notificationService->createNotification(
-            $user,
-            'Prêt remboursé avec succès. Merci pour votre ponctualité.'
-        );
-
-        $this->addFlash('success', 'Prêt remboursé avec succès !');
-        return $this->redirectToRoute('app_dashboard');
+        
     }
+
 }

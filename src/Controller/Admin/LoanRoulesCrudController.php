@@ -23,7 +23,7 @@ class LoanRoulesCrudController extends AbstractCrudController
             NumberField::new('minamount', 'Montant minimum'),
             NumberField::new('maxamount', 'Montant maximum'),
             IntegerField::new('duration', 'Durée (jours)'),
-            NumberField::new('interestrate', 'Taux d\'intérêt')
+            NumberField::new('interestrate', 'Taux d\'intérêt en %')
                 ->setNumDecimals(3) // Affiche 3 chiffres après la virgule
                 ->setStoredAsString(false), // Optionnel, si nécessaire
         ];

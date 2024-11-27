@@ -30,7 +30,7 @@ class Loan
     private ?bool $paid = null;
 
     #[ORM\Column]
-    private ?float $accountid = null;
+    private ?int $accountid = null;
 
     public function getId(): ?int
     {
@@ -97,12 +97,12 @@ class Loan
         return $this;
     }
 
-    public function getAccountid(): ?float
+    public function getAccountid(): ?int
     {
         return $this->accountid;
     }
 
-    public function setAccountid(float $accountid): static
+    public function setAccountid(int $accountid): static
     {
         $this->accountid = $accountid;
 
