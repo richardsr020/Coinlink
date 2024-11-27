@@ -6,6 +6,65 @@
 {% block body %}
     <div class="container mt-5">
 
+        <!-- Overview Section -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card-custom overview-card">
+                <div class="row">
+                    <!-- concernant le code pin -->
+                    <div class="col-12 col-md-4 mb-3">
+                        <div class="p-2 border rounded" style="border-radius: 5px;">
+                            <h6 style="font-size: 0.9rem;"><i class="bi bi-person-check"></i>Configuration du PIN</h6>
+                            
+                             <p style="font-size: 0.8rem;">
+                                <i class="fas fa-cog"></i> code PIN : 
+                                <a href='{{ path('app_resetPin') }}'" class="badge text-white bg-primary nav-link"
+                                    style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
+                                     Reunitialiser
+                                </a>
+                            </p>
+                            <p style="font-size: 0.8rem;">
+                                <i class="fas fa-cog"></i> code PIN : 
+                                <a href='{{ path('app_setPin') }}'" class="badge text-white bg-primary nav-link"
+                                    style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
+                                     configurer
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                
+                    <!-- Liste des cryptos avec bouton d'achat 
+                    <div class="col-12 col-md-4 mb-3">
+                        <div class="p-2 border rounded" style="border-radius: 5px;">
+                            <h6 class="text-center" style="font-size: 0.9rem;"><i class="bi bi-currency-bitcoin"></i> Cryptomonnaies
+                            </h6>
+                            <ul class="list-group list-group-flush">
+            
+                            </ul>
+                        </div>
+                    </div> -->
+                
+                    <!-- Emprunt(crédit) 
+                    <div class="col-12 col-md-4 mb-3">
+                        <div class="p-2 text-center border rounded" style="border-radius: 5px;">
+                            <h6 style="font-size: 0.9rem;"><i class="bi bi-wallet2"></i> Emprunt(crédit) </h6>
+                            <p style="font-size: 0.8rem;">
+                                <strong></strong>
+                                prélevement dans : <strong></strong>
+                            </p>
+            
+                        </div> -->
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
     </div>
 
     <style>

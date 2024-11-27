@@ -1,0 +1,159 @@
+<?php
+
+namespace App\Service;
+
+use App\Entity\Loan;
+use App\Entity\User;
+use App\Entity\Incomesloan;
+use App\Entity\Account;
+use App\Entity\LoanRoules;
+use Doctrine\ORM\EntityManagerInterface;
+
+
+class LoanService
+{
+    private EntityManagerInterface $em;
+    
+
+    public function __construct(EntityManagerInterface $em )
+    {
+        $this->em = $em;
+       
+    }
+
+    /**
+     * Crée un prêt pour l'utilisateur
+     */
+    public function createLoan(float $amount, $user): void
+    {
+
+        $account = $this->em->getRepository(Account::class)->findOneBy(['userid' => $user->getId()]);
+        if (!$account) {
+            throw new \Exception("Compte utilisateur introuvable.");
+        }
+
+        // Vérification si l'utilisateur a déjà un prêt impayé
+        $existingLoan = $this->em->getRepository(Loan::class)->findOneBy([
+            'loanauthor' => $account,
+            'paid' => false,
+        ]);
+        if ($existingLoan) {
+            throw new \Exception("Vous avez déjà un prêt impayé.");
+        }
+
+        // Récupération des règles de prêt
+        $loanRules = $this->getLoanRules($amount);
+        $interestRate = $loanRules['interestRate'];
+        $loanDurationDays = $loanRules['durationDays'];
+
+        // Calcul de la date d'échéance
+        $dueDate = (new \DateTimeImmutable())->modify("+{$loanDurationDays} days");
+
+        // Mise à jour du solde de l'utilisateur
+        $account->setBalance($account->getBalance() + $amount);
+        $this->em->persist($account);
+
+        // Création du prêt
+        $loan = new Loan();
+        $loan->setLoanauthor($account);
+        $loan->setAmount($amount);
+        $loan->setDuedate($dueDate);
+        $loan->setPaid(false);
+        $loan->setAcceptedterm(true);
+
+        $this->em->persist($loan);
+        $this->em->flush();
+    }
+
+    /**
+     * Rembourse un prêt existant
+     */
+    public function repayLoan(Loan $loan): void
+    {
+        if ($loan->isPaid()) {
+            throw new \Exception("Ce prêt a déjà été remboursé.");
+        }
+
+        $account = $loan->getLoanauthor();
+        if (!$account) {
+            throw new \Exception("Compte associé au prêt introuvable.");
+        }
+
+        $balance = $account->getBalance();
+        $loanAmount = $loan->getAmount();
+        $interestAmount = ($loan->getInterestrate()*$loanAmount)/100;
+        $totalRepayment = $loanAmount + $interestAmount;
+
+        // Vérification de la date d'échéance
+        $today = new \DateTimeImmutable();
+        if ($loan->getDuedate() < $today) {
+            throw new \Exception("Date d'échéance dépassée, remboursement non possible.");
+        }
+
+        // Vérification du solde suffisant pour rembourser
+        if ($balance < $totalRepayment) {
+            throw new \Exception("Solde insuffisant pour rembourser le prêt.");
+        }
+
+        // Mise à jour du solde du compte
+        $account->setBalance($balance - $totalRepayment);
+        $this->em->persist($account);
+
+        // Enregistrement de l'intérêt dans Incomesloan
+        $incomeLoan = new Incomesloan();
+        $incomeLoan->setAccountid($account);
+        $incomeLoan->setAmount($interestAmount);
+        $incomeLoan->setCreatedat(new \DateTimeImmutable());
+        $this->em->persist($incomeLoan);
+
+        // Mise à jour du statut du prêt
+        $loan->setPaid(true);
+        $this->em->persist($loan);
+
+        // Sauvegarde des modifications
+        $this->em->flush();
+    }
+
+    /**
+     * Trouve un prêt impayé dans la table
+     */
+    public function checkUnpaidLoans(User $currentUser): ?Loan
+{
+    // Récupérer le compte associé à l'utilisateur actuellement connecté
+    $currentAccount = $this->em->getRepository(Account::class)->findOneBy(['userid' => $currentUser]);
+    
+    if (!$currentAccount) {
+        throw new \Exception("Compte utilisateur introuvable.");
+    }
+
+
+    // Chercher un prêt impayé pour le compte associé
+    $unpaidLoan = $this->em->getRepository(Loan::class)->findOneBy([
+        'loanauthor' => $currentAccount, // Compte associé
+        'paid' => false // Prêt impayé
+    ]);
+
+    // Retourner le prêt ou null si aucun n'est trouvé
+    return $unpaidLoan ?: null;
+}
+
+
+    /**
+     * Récupère les règles de prêt pour un montant donné
+     */
+    public function getLoanRules(float $amount): array
+    {
+        $loanRules = $this->em->getRepository(LoanRoules::class)->findAll();
+
+        foreach ($loanRules as $rule) {
+            if ($amount >= $rule->getMinamount() && $amount <= $rule->getMaxamount()) {
+                return [
+                    'interestRate' => $rule->getInterestrate() / 100, // Taux d'intérêt sous forme décimale
+                    'durationDays' => $rule->getDuration(),
+                ];
+            }
+        }
+
+        throw new \Exception("Aucune règle de prêt trouvée pour ce montant.");
+    }
+}

@@ -76,6 +76,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fullname = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $brithdate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $humanproofimage = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $idcard = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $idcardback = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $residenceproofimage = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $country = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone = null;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -360,6 +384,102 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): static
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getFullname(): ?string
+    {
+        return $this->fullname;
+    }
+
+    public function setFullname(?string $fullname): static
+    {
+        $this->fullname = $fullname;
+
+        return $this;
+    }
+
+    public function getBrithdate(): ?\DateTimeImmutable
+    {
+        return $this->brithdate;
+    }
+
+    public function setBrithdate(?\DateTimeImmutable $brithdate): static
+    {
+        $this->brithdate = $brithdate;
+
+        return $this;
+    }
+
+    public function getHumanproofimage(): ?string
+    {
+        return $this->humanproofimage;
+    }
+
+    public function setHumanproofimage(?string $humanproofimage): static
+    {
+        $this->humanproofimage = $humanproofimage;
+
+        return $this;
+    }
+
+    public function getIdcard(): ?string
+    {
+        return $this->idcard;
+    }
+
+    public function setIdcard(?string $idcard): static
+    {
+        $this->idcard = $idcard;
+
+        return $this;
+    }
+
+    public function getIdcardback(): ?string
+    {
+        return $this->idcardback;
+    }
+
+    public function setIdcardback(?string $idcardback): static
+    {
+        $this->idcardback = $idcardback;
+
+        return $this;
+    }
+
+    public function getResidenceproofimage(): ?string
+    {
+        return $this->residenceproofimage;
+    }
+
+    public function setResidenceproofimage(?string $residenceproofimage): static
+    {
+        $this->residenceproofimage = $residenceproofimage;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
 
         return $this;
     }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande de Prêt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ6Hq7mP3p8mIMmUus3F7vx9sO5WsP3wpNSw7AKyfZzI71dCz4MP6b31ce6w" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ffdee9, #b5fffc);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .loan-container {
+            background: rgba(255, 255, 255);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .loan-container h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .loan-container ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .loan-container ul li {
+            margin-bottom: 15px;
+            color:#333;
+        }
+
+        .loan-container ul li span {
+            font-weight: bold;
+            color:#333;
+        }
+
+        .loan-container form {
+            margin-top: 20px;
+        }
+
+        .loan-container button {
+            background: #00c6fb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .loan-container button:hover {
+            background: #0077b6;
+        }
+    </style>
+</head>
+<body>
+    <div class="loan-container">
+        <h1>Demande de Prêt</h1>
+        <ul>
+            <li><span>KYC requis :</span> Un processus de vérification d'identité est nécessaire pour emprunter. Vous devrez soumettre une pièce d'identité valide avant d'être approuvé.</li>
+            <li><span>Limite d'emprunt :</span> Vous ne pouvez emprunter plus d'un tiers de votre solde disponible. Cette limite a été établie pour garantir une gestion prudente de vos finances.</li>
+            <li><span>Durée de remboursement :</span> Le remboursement du prêt doit être effectué dans un délai de 30 jours. Un retard peut entraîner des frais supplémentaires et des pénalités.</li>
+            <li><span>Acceptation des termes :</span> En continuant, vous acceptez les conditions du contrat de prêt. Assurez-vous de comprendre toutes les implications avant de procéder.</li>
+        </ul>
+        {{ form_start(form, {'attr': {'class': 'form-group'}}) }}
+            <div class="mb-3">
+                {{ form_label(form.amount, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.amount, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.amount) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.accountid, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.accountid, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.accountid) }}
+            </div>
+            <button type="submit" class="btn btn-primary">Suivant</button>
+        {{ form_end(form) }}
+    </div>
+</body>
+</html>

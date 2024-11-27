@@ -132,14 +132,10 @@
                             </p>
                              
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_p2p_trading') }}">
-                                <i class="fas fa-exchange-alt" style="font-size: 20px;"></i> P2P Trading
-                            </a>
-                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_chat') }}">
-                                <i class="fas fa-comments" style="font-size: 20px;"></i> linkerChat
+                                <i class="fas fa-comments" style="font-size: 20px;"></i>
                             </a>
                         </li>
                     </ul>
@@ -167,19 +163,26 @@
                     <!-- Statut de l'utilisateur -->
                     <div class="col-12 col-md-4 mb-3">
                         <div class="p-2 border rounded" style="border-radius: 5px;">
-                            <h6 style="font-size: 0.9rem;"><i class="bi bi-person-check"></i> Statut</h6>
+                            <h6 style="font-size: 0.9rem;"><i class="bi bi-person-check"></i> Config </h6>
                             <p style="font-size: 0.8rem;">
-                                KYC : Non
-                                <span href="{{ path('app_p2p_trading') }}'" class="badge text-white bg-primary nav-link
+                            {% if dashboard.userInfo.phone == null %}
+                                Compte Marchand : Non
+                                <span href="{{ path('app_kyc_form') }}'" class="badge text-white bg-primary nav-link
                                     style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
-                                    <i class="bi bi-shield-check"></i> Passer KYC
+                                    <i class="bi bi-shield-check"></i> Activer
                                 </span>
                             </p>
+                            {% endif %}
+                            {% if dashboard.userInfo.phone %}
+                                <span class="badge bg-success text-white">
+                                    Compte Marchand <i class="fas fa-check-circle"></i>
+                                </span>
+                            {% endif %}
                             <p style="font-size: 0.8rem;">
-                                Marchand P2P : Non
-                                <a href='{{ path('app_p2p_trading') }}'" class="badge text-white bg-primary nav-link"
+                                <i class="fas fa-cog"></i> Parametres : 
+                                <a href='{{ path('app_settings') }}'" class="badge text-white bg-primary nav-link"
                                     style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
-                                    <i class="bi bi-graph-up-arrow"></i> Devenir
+                                     acceder
                                 </a>
                             </p>
                         </div>
@@ -203,16 +206,15 @@
                         </div>
                     </div>
                 
-                    <!-- Solde du portefeuille financement -->
+                    <!-- Emprunt(crédit) -->
                     <div class="col-12 col-md-4 mb-3">
                         <div class="p-2 text-center border rounded" style="border-radius: 5px;">
-                            <h6 style="font-size: 0.9rem;"><i class="bi bi-wallet2"></i> Solde de Financement</h6>
+                            <h6 style="font-size: 0.9rem;"><i class="bi bi-wallet2"></i> Emprunt(crédit) </h6>
                             <p style="font-size: 0.8rem;">
-                                <strong>0000 USDT</strong>
+                                <strong>{{ dueAmount }}$</strong>
+                                prélevement dans : <strong>{{ dueDaysInterval }}</strong>
                             </p>
-                            <a href='{{ path('app_p2p_trading') }}'" class="badge text-white bg-info nav-link" style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
-                                <i class="bi bi-box-arrow-right"></i> Accéder
-                            </a>
+            
                         </div>
                     </div>
                 </div>

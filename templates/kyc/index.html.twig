@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}KYC - Vérification de l'utilisateur{% endblock %}
+
+{% block body %}
+<style>
+    /* Fond dégradé léger du rose au bleu turquoise */
+    body {
+        background: linear-gradient(135deg, #FF66B2, #40E0D0); /* Dégradé de rose à bleu turquoise */
+        font-size: 0.9rem; /* Réduction de la taille des textes */
+    }
+    /* Réduction de la largeur des champs, bordures arrondies, texte gris sombre */
+    .form-control-sm,
+    .form-select-sm {
+        width: 80%; /* Réduit la largeur des champs */
+        border-radius: 12px; /* Bordures arrondies */
+        background-color: transparent; /* Fond transparent */
+        border: 1px solid #333; /* Bordure gris sombre */
+        color: #D3D3D3; /* Texte gris sombre */
+        font-size: 1rem; /* Augmenter la taille des textes dans les champs */
+    }
+
+    /* Pour le texte des labels et autres éléments */
+    .card-body {
+        font-size: 0.9rem; /* Taille réduite du texte dans la carte */
+        color: #D3D3D3; /* Texte gris sombre dans le corps de la carte */
+    }
+
+    h1 {
+        font-size: 1.8rem; /* Ajuste la taille du titre */
+        color: #333; /* Texte gris sombre */
+    }
+
+    button[type="submit"] {
+        font-size: 1rem; /* Ajuste la taille du texte dans le bouton */
+        border-radius: 12px; /* Bordures arrondies */
+    }
+
+    /* Espacement et positionnement des champs */
+    .form-group {
+        margin-bottom: 1.5rem; /* Espacement plus grand entre les champs */
+    }
+
+    /* Amélioration du visuel pour le bouton */
+    button[type="submit"] {
+        background-color: #333;
+        color: white;
+    }
+
+    /* Amélioration visuelle pour les alertes */
+    .alert {
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="bg-dark text-white p-3 rounded">
+    <p>
+        Sur notre plateforme <strong>CoinLink</strong>, le processus <strong>KYC (Know Your Customer)</strong> est essentiel pour garantir la sécurité et la conformité légale des comptes marchands. Il permet de vérifier l'identité des utilisateurs afin de protéger nos services contre les fraudes et les activités illégales, tout en offrant une confiance accrue aux clients.
+    </p>
+    <p class="text-danger fw-bold">
+        Avertissement : Toute tentative de fournir des informations incohérants avec votre compte entraînera le rejet immédiat de votre demande de compte marchand.
+    </p>
+</div>
+
+
+<div class="container mt-5">
+    <h1 class="text-center">Formulaire de vérification KYC</h1>
+    <div class="d-flex justify-content-center">
+        <div class="col-lg-8">
+            <div class="card mt-4">
+                <div class="card-body">
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {{ form_start(kycForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
+                      
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.fullname) }}
+                                {{ form_widget(kycForm.fullname, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                {{ form_errors(kycForm.fullname) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.brithdate) }}
+                                {{ form_widget(kycForm.brithdate, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                {{ form_errors(kycForm.brithdate) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.country) }}
+                                {{ form_widget(kycForm.country, {'attr': {'class': 'form-select form-select-sm'}}) }}
+                                {{ form_errors(kycForm.country) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.phone) }}
+                                {{ form_widget(kycForm.phone, {'attr': {'class': 'form-select form-select-sm'}}) }}
+                                {{ form_errors(kycForm.phone) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.avatar) }}
+                                {{ form_widget(kycForm.avatar, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                {{ form_errors(kycForm.avatar) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.humanproofimage) }}
+                                {{ form_widget(kycForm.humanproofimage, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                {{ form_errors(kycForm.humanproofimage) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.idcard) }}
+                                {{ form_widget(kycForm.idcard, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                {{ form_errors(kycForm.idcard) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.idcardback) }}
+                                {{ form_widget(kycForm.idcardback, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                {{ form_errors(kycForm.idcardback) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form_label(kycForm.residenceproofimage) }}
+                                {{ form_widget(kycForm.residenceproofimage, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                {{ form_errors(kycForm.residenceproofimage) }}
+                            </div>
+                        </div>
+                    </div>
+                      
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Soumettre</button>
+                    {{ form_end(kycForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -63,4 +63,5 @@ class Incomes
 
         return $this;
     }
+
 }

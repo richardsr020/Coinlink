@@ -6,6 +6,7 @@
 parameters:
         site_name: 'Coin_Link'
         message_thumbnail_directory: '%kernel.project_dir%/public/uploads/message_thumbnail/'
+        kyc_thumbnail_directory: '%kernel.project_dir%/public/uploads/kyc_thumbnail/'
 
 services:
     # default configuration for services in *this* file
@@ -15,6 +16,10 @@ services:
         
     App\Twig\TimeAgoExtension:
         tags: ['twig.extension']
+
+    App\Service\CountryService:
+        arguments:
+            $client: '@http_client'
     
 
     # makes classes in src/ available to be used as services

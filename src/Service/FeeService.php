@@ -21,18 +21,23 @@ class FeeService
      */
     public function calculateFee(float $transactionAmount): float
     {
-        $fee = $this->feeRepository->findOneBy([
-            'minamount' => ['lte' => $transactionAmount],
-            'maxamount' => ['gte' => $transactionAmount],
-        ]);
+        // Récupération de toutes les entrées de la table Fee
+        $fees = $this->feeRepository->findAll();
 
-        if (!$fee) {
-            return 0.0;
+        // Parcourir chaque frais pour trouver l'intervalle correspondant
+        foreach ($fees as $fee) {
+            if ($transactionAmount >= $fee->getMinamount() && $transactionAmount <= $fee->getMaxamount()) {
+
+                
+                // Calcul des frais en pourcentage
+               $fixedFee  = $fee->getFeepercentage() * $transactionAmount;
+
+                // Retourner la somme des frais fixes et en pourcentage
+                return $fixedFee;//+ $percentageFee;
+            }
         }
 
-        $fixedFee = $fee->getFeeamount();
-        $percentageFee = ($fee->getFeepercentage() / 100) * $transactionAmount;
-
-        return $fixedFee + $percentageFee;
+        // Retourner 0 si aucun intervalle ne correspond
+        return 0.0;
     }
 }

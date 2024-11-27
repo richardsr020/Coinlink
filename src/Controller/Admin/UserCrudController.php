@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -41,6 +42,22 @@ class UserCrudController extends AbstractCrudController
             BooleanField::new('is_email_verified')->setFormTypeOption('disabled', true),
             BooleanField::new('islocked'),
             ArrayField::new('roles'),
+            ImageField::new('humanproofimage')
+                ->setUploadDir('public/uploads/kyc_thumbnail')
+                ->setBasePath('uploads/kyc_thumbnail')
+                ->setRequired(true), // Champ fichier obligatoire
+            ImageField::new('idcard')
+                ->setUploadDir('public/uploads/kyc_thumbnail')
+                ->setBasePath('uploads/kyc_thumbnail')
+                ->setRequired(true), // Champ fichier obligatoire
+            ImageField::new('idcardback')
+                ->setUploadDir('public/uploads/kyc_thumbnail')
+                ->setBasePath('uploads/kyc_thumbnail')
+                ->setRequired(true), // Champ fichier obligatoire
+            ImageField::new('residenceproofimage')
+                ->setUploadDir('public/uploads/kyc_thumbnail')
+                ->setBasePath('uploads/kyc_thumbnail')
+                ->setRequired(true), // Champ fichier obligatoire
         ];
     }
     

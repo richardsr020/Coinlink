@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compte Bloqué{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+    <div class="text-center p-5 rounded bg-white shadow">
+        <i class="fas fa-user-lock text-danger fa-4x mb-4"></i>
+        <h1 class="text-danger mb-3">Votre compte est temporairement bloqué</h1>
+        <p class="mb-2" style="font-size: 0.95rem;">
+            Nous avons constaté une activité inhabituelle sur votre compte ou une violation 
+            de nos politiques. Cela peut inclure des transactions suspectes, un signalement 
+            par un autre utilisateur ou toute activité contraire à nos conditions d'utilisation.
+        </p>
+        <p class="mb-3" style="font-size: 0.95rem;">
+            Votre cas est actuellement en cours d'examen. Si vous pensez que cela est une erreur, 
+            vous pouvez <a href="{{ path('app_home') }}" class="text-primary">contacter notre support</a>.
+        </p>
+        <p style="font-size: 0.95rem;">
+            Une notification vous sera envoyée par email une fois la vérification 
+            terminée. Merci pour votre patience et votre compréhension.
+        </p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary mt-4">Accueil</a>
+        <a href="{{ path('app_terms') }}" class="btn btn-primary mt-4">Nos politiques d'utilisation</a>
+    </div>
+</div>
+{% endblock %}

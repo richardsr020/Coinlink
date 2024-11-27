@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation du prêt{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center vh-100" style="background: linear-gradient(135deg, rgba(255, 192, 203, 0.1), rgba(64, 224, 208, 0.1));">
+    <div class="card shadow-lg p-4" style="width: 500px; background: transparent; border: none;">
+        <h3 class="text-center mb-4" style="font-size: 1.5rem; font-weight: bold;">Confirmer le prêt</h3>
+        
+        <div class="mb-4">
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Emprunteur :</strong> <span style="float: right;">{{ name }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Email :</strong> <span style="float: right;">{{ email }}</span></p>
+                        <p style="margin: 0; font-size: 0.9rem;"><strong>ID compte :</strong> <span style="float: right;"> 000 00{{ accountId }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Montant du prêt :</strong> <span style="float: right;">$ {{ amount }}</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Durée de remboursement :</strong> <span style="float: right;">{{ duration }} jours</span></p>
+            <p style="margin: 0; font-size: 0.9rem;"><strong>Taux d'intérêt :</strong> <span style="float: right;">{{ loanInterest }}% </span></p>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{{ path('loan_create') }}" class="btn btn-success me-2" style="font-size: 0.8rem; padding: 5px 15px;">Suivant</a>
+            <a href="{{ path('app_loan_confirm', {'decline': true}) }}" class="btn btn-danger" style="font-size: 0.8rem; padding: 5px 15px;">Annuler</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

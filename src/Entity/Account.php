@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AccountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
@@ -28,6 +30,17 @@ class Account
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $accounthash = null;
+
+    /**
+     * @var Collection<int, Loan>
+     */
+    #[ORM\OneToMany(targetEntity: Loan::class, mappedBy: 'loanauthor', orphanRemoval: true)]
+    private Collection $loans;
+
+    public function __construct()
+    {
+        $this->loans = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +103,36 @@ class Account
     public function setAccounthash(?string $accounthash): static
     {
         $this->accounthash = $accounthash;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Loan>
+     */
+    public function getLoans(): Collection
+    {
+        return $this->loans;
+    }
+
+    public function addLoan(Loan $loan): static
+    {
+        if (!$this->loans->contains($loan)) {
+            $this->loans->add($loan);
+            $loan->setLoanauthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLoan(Loan $loan): static
+    {
+        if ($this->loans->removeElement($loan)) {
+            // set the owning side to null (unless already changed)
+            if ($loan->getLoanauthor() === $this) {
+                $loan->setLoanauthor(null);
+            }
+        }
 
         return $this;
     }
