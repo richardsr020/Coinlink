@@ -25,7 +25,7 @@ class TransferType extends AbstractType
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Transfer',
+                'label' => 'Suivant',
                 'attr' => ['class' => 'btn btn-primary mt-3'],
             ]);
     }

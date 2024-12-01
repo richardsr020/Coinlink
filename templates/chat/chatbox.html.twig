@@ -33,16 +33,18 @@
                 {# Résultat de la recherche #}
                 {% if user %}
                 <div class="alert alert-success mt-4" style="border-radius: 15px;">
-                    <h5><i class="fas fa-user-check"></i> Utilisateur trouvé</h5>
+                    <h5><i class="fas fa-user-check"></i> resultat</h5>
                     <div class="card mt-3">
                         <div class="card-body d-flex justify-content-between">
                             <div>
-                                <p><strong>Nom :</strong> {{ user.name }}</p>
-                                <p><strong>Email :</strong> {{ user.email }}</p>
+                                <p style="font-size: 0.8rem;"><strong>Nom :</strong> {{ user.name }}</p>
+                                <p style="font-size: 0.8rem;"><strong>Email :</strong> {{ user.email }}</p>
                             </div>
-                            <a href="" class="btn btn-primary">
-                                <i class="fas fa-comments"></i> Chat
-                            </a>
+                            <div>
+                                <a href="{{path('chat_conversation',{'userId': user.id})}}" class="badge text-white bg-primary nav-link" style="cursor: pointer; border-radius: 4px;">
+                                    <i class="fas fa-comments"></i> Chat
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -30,7 +30,7 @@ class FeeService
 
                 
                 // Calcul des frais en pourcentage
-               $fixedFee  = $fee->getFeepercentage() * $transactionAmount;
+               $fixedFee  = ($fee->getFeepercentage() * $transactionAmount) / 100;
 
                 // Retourner la somme des frais fixes et en pourcentage
                 return $fixedFee;//+ $percentageFee;

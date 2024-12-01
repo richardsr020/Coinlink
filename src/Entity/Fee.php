@@ -20,9 +20,6 @@ class Fee
     private ?int $minamount = null;
 
     #[ORM\Column(type: 'float')]
-    private ?float $feeamount = null; // Modifié pour un float
-
-    #[ORM\Column(type: 'float')]
     private ?float $feepercentage = null; // Modifié pour un float
 
     public function getId(): ?int
@@ -50,18 +47,6 @@ class Fee
     public function setMinamount(int $minamount): static
     {
         $this->minamount = $minamount;
-
-        return $this;
-    }
-
-    public function getFeeamount(): ?float
-    {
-        return $this->feeamount;
-    }
-
-    public function setFeeamount(float $feeamount): static
-    {
-        $this->feeamount = $feeamount;
 
         return $this;
     }

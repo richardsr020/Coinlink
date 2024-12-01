@@ -28,7 +28,7 @@ class UserCrudController extends AbstractCrudController
     {
         return $actions
                     ->disable(Action::NEW)
-                    ->add(Crud::PAGE_INDEX, Action::DETAIL, Action::DELETE);    
+                    ->add(Crud::PAGE_INDEX, Action::DETAIL, Action::DELETE,Action::DETAIL);    
     }
     
     public function configureFields(string $pageName): iterable

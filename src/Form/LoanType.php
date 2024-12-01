@@ -17,15 +17,14 @@ class LoanType extends AbstractType
             ->add('amount', MoneyType::class, [
                 'label' => 'Montant de l\'emprunt',
                 'currency' => 'USD',
-                'attr' => [
-               // Ajout de la classe Bootstrap pour le style
+                'attr' => [// Ajout de la classe Bootstrap pour le style
                     'placeholder' => 'Entrez le montant souhaité',
                 ],
+             
             ])
             ->add('accountid', IntegerType::class, [
                 'label' => 'ID du compte',
-                'attr' => [
-                 // Ajout de la classe Bootstrap pour le style
+                'attr' => [ // Ajout de la classe Bootstrap pour le style
                     'placeholder' => 'Entrez l\'ID du compte',
                 ],
             ]);

@@ -28,7 +28,7 @@ class TransferService
     public function handleTransfer(Account $fromAccount, Account $toAccount, float $amount, string $hash): Transaction
     {
         // Calculer les frais
-        $fees = $this->feeService->calculateFee($amount);
+        $fees = 0;
 
         // Vérifier si le compte émetteur a suffisamment de fonds
         if ($fromAccount->getBalance() <= ($amount + $fees)) {
@@ -78,7 +78,7 @@ class TransferService
      */
     public function calculateFees(float $amount): float
     {
-        return $this->feeService->calculateFee($amount);
+        return 0;
     }
 
     /**

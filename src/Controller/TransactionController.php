@@ -8,6 +8,7 @@ use App\Entity\Transaction;
 use App\Service\AccountService;
 use App\Form\TransferType;
 use App\Service\TransferService;
+use App\Service\WithdrawService;
 use App\Repository\AccountRepository;
 use App\Service\TransactionHashGeneratorService;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -46,9 +47,15 @@ class TransactionController extends AbstractController
     {
         $form = $this->createForm(TransferType::class);
         $form->handleRequest($request);
+        $userAccount = $this->getUser()->getAccount();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            if($data->getToaccountid() == $userAccount->getId()){
+                $this->addFlash('error', 'error', 'Le Transfert vers votre propre compte est impossible');
+                return $this->redirectToRoute('app_transfer');
+            }
 
             // Stocke les données dans la session
             $session->set('transfer_data', $data);
@@ -73,8 +80,8 @@ class TransactionController extends AbstractController
         SessionInterface $session, 
         AccountRepository $accountRepository, 
         TransferService $transferService, // Injection du service
-        $confirm
-    ): Response {
+        $confirm): Response 
+        {
         // Récupère les données de transfert stockées dans la session
         $data = $session->get('transfer_data');
 
@@ -137,7 +144,8 @@ class TransactionController extends AbstractController
         SessionInterface $session,
         AccountRepository $accountRepository,
         AccountService $accountService
-    ): Response {
+    ): Response 
+    {
         // Vérifie si les données de transfert sont disponibles dans la session
         $transferData = $session->get('transfer_data');
         if (!$transferData) {
@@ -199,6 +207,138 @@ class TransactionController extends AbstractController
                     // Gérer les fonds insuffisants ou autres erreurs levées
                     $this->addFlash('error', $e->getMessage());
                     return $this->redirectToRoute('app_transfer');
+                }
+            } else {
+                $this->addFlash('error', 'Le code PIN est incorrect.');
+            }
+        }
+
+        return $this->render('settings/verifyPin.html.twig', [
+            'pinForm' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     *  méthodes du controller pour la gestion des retraits, etc.
+     * ce methode utilisent les meme vues mais avec de legeres modificatrions dans les 
+     * au niveau de la logique
+     *  */ 
+
+    #[Route('dashboard/withdraw', name: 'app_withdraw')]
+    public function withdraw(Request $request, SessionInterface $session): Response
+    {
+        $form = $this->createForm(TransferType::class);
+        $form->handleRequest($request);
+        $userAccount = $this->getUser()->getAccount();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if($data->getToaccountid() == $userAccount->getId()){
+                $this->addFlash('error', 'Le retrait vers votre propre compte est impossible.');
+                return $this->redirectToRoute('app_withdraw');
+            }
+
+            // Stocke les données dans la session
+            $session->set('withdraw_data', $data);
+
+            return $this->redirectToRoute('app_withdraw_confirm');
+        }
+
+        return $this->render('transaction/withdraw.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    #[Route('/dashboard/withdrawConfirm/{confirm?}', name: 'app_withdraw_confirm')]
+    public function withdrawConfirm(
+        SessionInterface $session,
+        AccountRepository $accountRepository,
+        WithdrawService $withdrawService, // Utilisation du service
+        string $confirm = null
+    ): Response {
+        // Récupère les données de transfert depuis la session
+        $data = $session->get('withdraw_data');
+        if (!$data) {
+            $this->addFlash('error', 'Les données de retrait sont introuvables. Veuillez recommencer.');
+            return $this->redirectToRoute('app_withdraw');
+        }
+
+        // Récupère le compte destinataire
+        $toAccount = $accountRepository->find($data->getToaccountid());
+        if (!$toAccount) {
+            $this->addFlash('error', 'Le compte bénéficiaire est introuvable.');
+            return $this->redirectToRoute('app_withdraw');
+        }
+
+        // Calcul des frais
+        $fees = $withdrawService->calculateWithdrawalFees($data->getAmount());
+
+        if ($confirm === 'true') {
+            return $this->redirectToRoute('app_withdraw_verifyPin');
+        }
+
+        if ($confirm === 'false') {
+            $this->addFlash('success', 'La transaction a été annulée.');
+            return $this->redirectToRoute('app_withdraw');
+        }
+
+        return $this->render('transaction/withdraw_confirm.html.twig', [
+            'name' => $toAccount->getUserid()->getName(),
+            'lastname' => $toAccount->getUserid()->getLastname(),
+            'email' => $toAccount->getUserid()->getEmail(),
+            'data' => $data,
+            'fees' => $fees,
+        ]);
+    }
+
+
+
+    
+    #[Route('/dashboard/withdraw/verifyPin', name: 'app_withdraw_verifyPin')]
+    public function withdraw_verifyPin(
+        Request $request,
+        SessionInterface $session,
+        AccountRepository $accountRepository,
+        WithdrawService $withdrawService,
+        AccountService $accountService
+    ): Response {
+        // Récupère les données de transfert
+        $transferData = $session->get('withdraw_data');
+        if (!$transferData) {
+            $this->addFlash('error', 'Les données de retrait sont introuvables. Veuillez recommencer.');
+            return $this->redirectToRoute('app_withdraw');
+        }
+
+        $toAccount = $accountRepository->find($transferData->getToaccountid());
+        $amount = $transferData->getAmount();
+
+        $user = $this->getUser();
+        $fromAccount = $accountRepository->findOneBy(['userid' => $user]);
+        if (!$fromAccount || !$toAccount) {
+            $this->addFlash('error', 'Les comptes spécifiés sont introuvables.');
+            return $this->redirectToRoute('app_withdraw');
+        }
+
+        $form = $this->createForm(PinType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $pin = (int)$form->getData()['pin'];
+
+            // Validation du PIN
+            if ($accountService->validateAccountHash($fromAccount, $pin)) {
+                try {
+                    $hash = uniqid('trx_', true);
+                    $withdrawService->handleWithdraw($fromAccount, $toAccount, $amount, $hash);
+
+                    $this->addFlash('success', 'Retrait effectué avec succès.');
+                    $session->remove('withdraw_data');
+                    return $this->redirectToRoute('app_dashboard');
+                } catch (\InvalidArgumentException $e) {
+                    $this->addFlash('error', $e->getMessage());
+                    return $this->redirectToRoute('app_withdraw');
                 }
             } else {
                 $this->addFlash('error', 'Le code PIN est incorrect.');

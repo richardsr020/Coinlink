@@ -6,8 +6,7 @@ use App\Entity\Fee;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -29,8 +28,10 @@ class FeeCrudController extends AbstractCrudController
             IdField::new('id')->onlyOnIndex(), // Affiche l'ID uniquement sur la page d'index
             IntegerField::new('maxamount')->setLabel('Montant Max'),
             IntegerField::new('minamount')->setLabel('Montant Min'),
-            MoneyField::new('feeamount')->setCurrency('USD')->setLabel('Montant des frais'),
-            PercentField::new('feepercentage')->setLabel('Pourcentage des frais')->setStoredAsFractional(true), // Pourcentage
+             // Frais Pourcentage
+            NumberField::new('feepercentage', 'Frais en %')
+                ->setNumDecimals(3) // Affiche 3 chiffres après la virgule
+                ->setStoredAsString(false), // Optionnel, si nécessaire
         ];
     }
 

@@ -61,17 +61,14 @@ class UserDashboardService
      */
     private function isKYCVerified(User $user): bool
     {
-        // Supposons qu'il y ait un champ ou une logique pour vérifier le KYC
-        // Adapter cette méthode selon vos besoins.
-        return true; //$user->getHasAcceptedTerms(); // Exemple simple
+        $user->getAccount();
+        // Assuming the KYC status is stored in the 'kycverified' field in the 'account' table
+        return $user->getAccount()->isKYCVerified();
     }
 
-    public function getTransactionHistory(User $user):array
+    public function getTransactionHistory(int $id)
     {
-                // Récupérer le compte de l'utilisateur
-        $account = $user->getAccount();
-
         // Récupérer l'historique des transactions (du plus récent au plus ancien)
-        return $transactions = $this->transactionRepository->findByAccount($account->getId());
+        return $transactions = $this->transactionRepository->find($id);
     }
 }

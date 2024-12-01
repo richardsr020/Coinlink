@@ -37,6 +37,19 @@ security:
         - { path: ^/chat/send/, roles: ROLE_USER }
         - { path: ^/dashboard/TransactionHistoryShow/, roles: ROLE_USER }
         - { path: ^/dashboard/deposit, roles: ROLE_USER }
-        - { path: ^/dashboard/transfert/, roles: ROLE_USER }
-        - { path: ^/p2p, roles: ROLE_USER }
+        - { path: ^/dashboard/transfer, roles: ROLE_USER }
+        - { path: ^/dashboard/transferConfirm/, roles: ROLE_USER }
+        - { path: ^/dashboard/verifyPin, roles: ROLE_USER }
+        - { path: ^/dashboard/withdraw, roles: ROLE_USER }
+        - { path: ^/dashboard/withdrawConfirm/, roles: ROLE_USER }
+        - { path: ^/dashboard/withdraw/verifyPin, roles: ROLE_USER }
+        - { path: ^/loan/request, roles: ROLE_USER }
+        - { path: ^/loan/confirm/, roles: ROLE_USER }
+        - { path: ^/loan/create, roles: ROLE_USER }
+        - { path: ^/loan/repay, roles: ROLE_USER }
+        - { path: ^/settings, roles: ROLE_USER }
+        - { path: ^/settings/setPin, roles: ROLE_USER }
+        - { path: ^/settings/resetPin, roles: ROLE_USER }
+        - { path: ^/settings/resetPin/save, roles: ROLE_USER }
+        - { path: ^/kyc, roles: ROLE_USER }
 

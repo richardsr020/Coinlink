@@ -38,6 +38,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(SessionInterface $session, Request $request): Response
     {
+        $siteName = $this->getParameter('site_name');
         // Récupération des statistiques
         $totalUsers = $this->statisticsService->getTotalUsersCount();
         $totalTransactions = $this->statisticsService->getTotalTransactionsIn24Hours();
@@ -64,6 +65,7 @@ class HomeController extends AbstractController
             'visitorCount' => $visitorCount,
             'form' => $form->createView(),
             'latestPosts' => $latestPosts,
+            'site_name' => $siteName
         ]);
     }
 }

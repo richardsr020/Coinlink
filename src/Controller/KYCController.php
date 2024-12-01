@@ -15,10 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class KYCController extends AbstractController
 {
     private CountryService $countryService;
+    private NotificationService $notificationService;
 
-    public function __construct(CountryService $countryService)
+    public function __construct(CountryService $countryService, NotificationService $notificationService )
     {
         $this->countryService = $countryService;
+        $this->notificationService = $notificationService;
         
     }
 
@@ -47,23 +49,27 @@ class KYCController extends AbstractController
             // Récupération et formatage du numéro de téléphone
             $data = $form->getData();
             $countryId =$data->getCountry();
-            $country = $this->$countryService->getAfricanCountry($countryId); // Champ "country" dans le formulaire
+            $country = $this->countryService->getAfricanCountry($countryId); // Champ "country" dans le formulaire
          
             $phone = $data->getPhone(); // Champ "phone" dans le formulaire
 
             try {
-                $formattedPhone = $this->countryService->formatPhoneNumberWithCountryCode($country, $phone);
+                $formattedPhone = $phone; //$this->countryService->formatPhoneNumberWithCountryCode();
                 $user->setPhone($formattedPhone);
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Erreur lors du formatage du numéro de téléphone : ' . $e->getMessage());
-                return $this->redirectToRoute('kyc_form');
+                return $this->redirectToRoute('app_kyc_form');
             }
 
             $entityManager->persist($user);
             $entityManager->flush();
 
             $this->addFlash('success', 'Vos informations KYC ont été soumises avec succès.');
-
+            // Notification de validation du KYC
+            $this->notificationService->createNotification(
+                $user,
+                'KYC soumis un badge apparaitra dans trois jours en cas d\'approbation .'
+            );
             return $this->redirectToRoute('app_dashboard');
         }
 

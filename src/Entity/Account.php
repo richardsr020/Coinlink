@@ -37,6 +37,9 @@ class Account
     #[ORM\OneToMany(targetEntity: Loan::class, mappedBy: 'loanauthor', orphanRemoval: true)]
     private Collection $loans;
 
+    #[ORM\Column]
+    private ?bool $kycverified = null;
+
     public function __construct()
     {
         $this->loans = new ArrayCollection();
@@ -133,6 +136,18 @@ class Account
                 $loan->setLoanauthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isKycverified(): ?bool
+    {
+        return $this->kycverified;
+    }
+
+    public function setKycverified(bool $kycverified): static
+    {
+        $this->kycverified = $kycverified;
 
         return $this;
     }

@@ -165,15 +165,18 @@
                         <div class="p-2 border rounded" style="border-radius: 5px;">
                             <h6 style="font-size: 0.9rem;"><i class="bi bi-person-check"></i> Config </h6>
                             <p style="font-size: 0.8rem;">
-                            {% if dashboard.userInfo.phone == null %}
-                                Compte Marchand : Non
-                                <span href="{{ path('app_kyc_form') }}'" class="badge text-white bg-primary nav-link
+                            {% if dashboard.userInfo.isKYCVerified == false %}
+                                Compte Marchand :
+                                <a href='{{ path('app_kyc_form') }}'" class="badge text-white bg-primary nav-link"
                                     style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
-                                    <i class="bi bi-shield-check"></i> Activer
-                                </span>
+                                    <span href="{{ path('app_kyc_form') }}'" class="badge text-white bg-primary nav-link
+                                        style="cursor: pointer; font-size: 0.7rem; padding: 0.3em 0.6em; border-radius: 4px;">
+                                        <i class="bi bi-shield-check"></i> Activer
+                                    </span>
+                                </a>
                             </p>
                             {% endif %}
-                            {% if dashboard.userInfo.phone %}
+                            {% if dashboard.userInfo.isKYCVerified == true %}
                                 <span class="badge bg-success text-white">
                                     Compte Marchand <i class="fas fa-check-circle"></i>
                                 </span>
@@ -271,7 +274,7 @@
             <div class="card-custom balance-card">
                 <div class="card-body">
                     <h5>Total balance</h5>
-                    <h2>${{ dashboard.balance }}</h2>
+                    <h2>${{ dashboard.balance|number_format(2) }}</h2>
                     <!-- <a href="">
                         <button class="btn btn-light mt-3">Retrait</button>
                     </a> -->
@@ -281,6 +284,9 @@
                     </a>
                     <a href="{{ path('app_deposit') }}">
                         <button class="btn btn-light mt-3">Deposer</button>
+                    </a>
+                    <a href="{{ path('app_withdraw') }}">
+                        <button class="btn btn-light mt-3">Retrait</button>
                     </a>
                     {% endif %}
                 </div>

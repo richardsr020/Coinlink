@@ -56,6 +56,7 @@ class RegistrationController extends AbstractController
             $account->setAccountnumber($accountService->generateUniqueAccountNumber());
             $account->setBalance($accountService->balanceInit());
             $account->setCreatedat(new \DateTimeImmutable());
+            $account->setKycverified(false);
             $user->setAccount($account);
 
             // Sauvegarder l'utilisateur et son compte

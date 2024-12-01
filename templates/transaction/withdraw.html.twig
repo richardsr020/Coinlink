@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transfert{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center"
+    style="height: 100vh; background: linear-gradient(135deg, rgba(245, 167, 184, 0.4), rgba(94, 205, 223, 0.4));">
+    <div class="p-4" style="width: 400px; border-radius: 10px;">
+        <h2 class="text-center mb-3" style="font-size: 1.5rem; color: #333;">Retrait de fonds</h2>
+
+        <p style="font-size: 0.9rem; text-align: center; color: #555;">
+            Les dépôts et retraits sur cette plateforme se font par des transferts entre utilisateurs.
+            Indiquez l'identifiant du compte destinataire et le montant, puis cliquez sur "Transfer".
+        </p>
+
+        {{ form_start(form, {'attr': {'id': 'transferForm'}}) }}
+
+        <div class="form-group mt-3">
+            {{ form_label(form.toaccountid, 'ID agent', {'label_attr': {'style': 'color: #555;'}}) }}
+            {{ form_widget(form.toaccountid, {'attr': {'class': 'form-control', 'style': 'background: transparent; border-color: #ccc; color: #333;'}}) }}
+            {{ form_errors(form.toaccountid) }}
+        </div>
+
+        <div class="form-group mt-3">
+            {{ form_label(form.amount, 'Montant', {'label_attr': {'style': 'color: #555;'}}) }}
+            {{ form_widget(form.amount, {'attr': {'class': 'form-control', 'style': 'background: transparent; border-color: #ccc; color: #333;'}}) }}
+            {{ form_errors(form.amount) }}
+        </div>
+
+        {{ form_end(form) }}
+
+
+    </div>
+</div>
+
+
+{% endblock %}

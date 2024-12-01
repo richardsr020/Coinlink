@@ -41,7 +41,7 @@ class DashboardController extends AbstractController
         // Appeler le service pour obtenir les données du dashboard
         $dashboardData = $this->dashboardService->getUserDashboardData($user);
         $unpaidLoan = $this->loanService->checkUnpaidLoans($user);
-         //dd($dashboardData);
+        //dd($dashboardData);
        
         if($dashboardData['userInfo']['isLocked']){
 
@@ -79,11 +79,7 @@ class DashboardController extends AbstractController
             $dueDaysInterval = 0;
           
         }
-
-
-        //prelevement automatique de l'emprunt 
-       
-
+        //Chargement des données vers twig
         return $this->render('dashboard/index.html.twig', [
             'dashboard' => $dashboardData,
             'notifications' => $notifications,
@@ -95,15 +91,12 @@ class DashboardController extends AbstractController
     #[Route('/dashboard/TransactionHistoryShow/{id}', name: 'transaction_history_show')]
     public function TransactionHistoryShow($id): Response
     {
-        // Récupérer l'utilisateur actuel
-        /** @var User $user */
-        $user = $this->getUser();
-     
-        // Appeler le service pour obtenir les données du dashboard
-        $transactionHistory = $this->dashboardService->getTransactionHistory($user);
-    
+
+        // Appeler le service pour obtenir les details d'une transaction
+        $transactionHistory = $this->dashboardService->getTransactionHistory($id);
+        
         return $this->render('dashboard/showTransactionHistory.html.twig', [
-            'transactionHystory' => $transactionHistory[$id],
+            'transactionHystory' => $transactionHistory
          
         ]);
     }
