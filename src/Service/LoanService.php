@@ -50,6 +50,11 @@ class LoanService
         // Calcul de la date d'échéance
         $dueDate = (new \DateTimeImmutable())->modify("+{$loanDurationDays} days");
 
+        //verification des fonds disponibles sur le compte utilisateur
+        if($account->getBalance() < 3 * $amount || $account->getBalance() == 0){
+            throw new \Exception("Le solde disponible insuffisant pour obtenir un emprunt");
+        }
+
         // Mise à jour du solde de l'utilisateur
         $account->setBalance($account->getBalance() + $amount);
         $this->em->persist($account);
@@ -131,11 +136,6 @@ class LoanService
     // Récupérer le compte associé à l'utilisateur actuellement connecté
     $currentAccount = $this->em->getRepository(Account::class)->findOneBy(['userid' => $currentUser]);
     
-    if (!$currentAccount) {
-        throw new \Exception("Compte utilisateur introuvable.");
-    }
-
-
     // Chercher un prêt impayé pour le compte associé
     $unpaidLoan = $this->em->getRepository(Loan::class)->findOneBy([
         'loanauthor' => $currentAccount, // Compte associé
@@ -162,7 +162,11 @@ class LoanService
                 ];
             }
         }
+         return [
+                    'interestRate' => 0,// Taux d'intérêt sous forme décimale
+                    'durationDays' => 30,
+                ];
 
-        throw new \Exception("Aucune règle de prêt trouvée pour ce montant.");
+        
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Entity\User;
+use DateTimeImmutable;
+use App\Service\ChatService;
 use App\Repository\TransactionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -10,11 +12,43 @@ class UserDashboardService
 {
     private EntityManagerInterface $em;
     private TransactionRepository $transactionRepository;
+    private ChatService $chatService;
 
-    public function __construct(EntityManagerInterface $em, TransactionRepository $transactionRepository)
+    public function __construct(EntityManagerInterface $em, ChatService $chatService, TransactionRepository $transactionRepository)
     {
         $this->em = $em;
         $this->transactionRepository = $transactionRepository;
+        $this->chatService = $chatService;
+
+    }
+
+    public function countRecentsMessages($user): int
+    {
+        $currentUserId = $user->getId();
+        // Récupère le dernier message de chaque conversation
+        $lastMessages = $this->chatService->getLastMessagesByUser($currentUserId);
+        $recents = [];
+
+        foreach ($lastMessages as $message) {
+            $now = new DateTimeImmutable();
+            $createdAt = new DateTimeImmutable($message->getCreatedAt()->format('Y-m-d H:i:s'));
+
+            // Calcul de la différence en secondes
+            $diffInSeconds = $now->getTimestamp() - $createdAt->getTimestamp();
+
+            // Si la différence est inférieure à 120 secondes (2 minutes)
+            if ($diffInSeconds < 120) {
+                $recents[] = $message;
+            }
+        }
+
+        if($recents)
+        {
+            return count($recents);
+        }
+
+        return 0;
+        
     }
 
     /**

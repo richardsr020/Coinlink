@@ -23,7 +23,8 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $hasher, 
         EntityManagerInterface $em, 
         UserService $userService,
-        MailerService $mailerService // Injection du service Mailer
+        MailerService $mailerService,// Injection du service Mailer
+        AccountService $accountService
     ): Response
     {
         $user = new User();
@@ -52,7 +53,6 @@ class RegistrationController extends AbstractController
 
             // Initialiser le compte
             $account = new Account();
-            $accountService = new AccountService();
             $account->setAccountnumber($accountService->generateUniqueAccountNumber());
             $account->setBalance($accountService->balanceInit());
             $account->setCreatedat(new \DateTimeImmutable());

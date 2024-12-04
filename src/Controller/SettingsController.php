@@ -36,7 +36,10 @@ class SettingsController extends AbstractController
 
         // Vérifie si le compte existe
         if (!$account) {
-            throw $this->createNotFoundException('Compte introuvable pour cet utilisateur.');
+             // Message de confirmation
+            $this->addFlash('error', 'Vueillez vous inscrir au prealable.');
+             // Redirige vers la route "app_register"
+            return $this->redirectToRoute('app_registration');
         }
 
         // Crée et traite le formulaire
@@ -56,6 +59,8 @@ class SettingsController extends AbstractController
 
             // Message de confirmation
             $this->addFlash('success', 'Votre code PIN a été défini avec succès.');
+             // Redirige vers la route "app_dashboard"
+            return $this->redirectToRoute('app_dashboard');
         }
 
         return $this->render('settings/setPin.html.twig', [
@@ -75,7 +80,10 @@ class SettingsController extends AbstractController
 
         // Vérifie si le compte existe
         if (!$account) {
-            throw $this->createNotFoundException('Compte introuvable pour cet utilisateur.');
+             // Message de confirmation
+            $this->addFlash('error', 'Vueillez vous inscrir au prealable.');
+             // Redirige vers la route "app_register"
+            return $this->redirectToRoute('app_registration');
         }
 
         // Crée et traite le formulaire
@@ -110,7 +118,10 @@ public function resetPinSave(Request $request, AccountRepository $accountReposit
 
     // Vérifie si le compte existe
     if (!$account) {
-        throw $this->createNotFoundException('Compte introuvable pour cet utilisateur.');
+         // Message de confirmation
+            $this->addFlash('error', 'Vueillez vous inscrir au prealable.');
+             // Redirige vers la route "app_register"
+            return $this->redirectToRoute('app_registration');
     }
 
     // Récupère les données stockées dans la session
@@ -134,7 +145,7 @@ public function resetPinSave(Request $request, AccountRepository $accountReposit
         if (!$passwordHasher->isPasswordValid($user, $inputPassword)) {
             $this->addFlash('error', 'Mot de passe incorrect. Réinitialisation annulée.');
 
-            return $this->redirectToRoute('app_resetPin_save');
+            return $this->redirectToRoute('app_resetPin');
         }
 
         // Appelle le service pour réinitialiser le hash du compte avec le PIN de la session

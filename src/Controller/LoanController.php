@@ -65,7 +65,14 @@ class LoanController extends AbstractController
     {
         $loanData = $session->get('loan_data');
         $user = $this->getUser();
-        $roules = $this->loanService->getLoanRules($loanData ['amount']);
+
+        try{
+            $roules = $this->loanService->getLoanRules($loanData ['amount']);
+        }catch(\Exception $e){
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('app_loan_confirm');
+        }
+        
         
 
         //informations detaillés concernant le pret
@@ -117,7 +124,16 @@ class LoanController extends AbstractController
         }
         
         // Créer le prêt
-        $this->loanService->createLoan($loanData ['amount'],$user);
+        try{
+
+            $this->loanService->createLoan($loanData ['amount'],$user);
+
+        }catch(\Exception $e){
+             $this->addFlash('error', $e->getMessage());
+          
+            return $this->redirectToRoute('loan_request');
+        }
+        
         
 
         $session->remove('loan_data');
@@ -131,15 +147,5 @@ class LoanController extends AbstractController
         return $this->redirectToRoute('app_dashboard');
     }
 
-    #[Route('/loan/repay', name: 'loan_repay')]
-
-    public function repayLoan(Request $request): Response
-    {
-        $user = $this->getUser();
-
-       
-
-        
-    }
 
 }

@@ -64,6 +64,7 @@
                 style="background: linear-gradient(to right, #ffcccb, #e0f7fa); border-radius: 15px;">
                 <h4 class="text-center mb-4"><i class="fas fa-history"></i> Conversations récentes</h4>
                 <div class="list-group">
+                {% if recentChat %}
                     {% for conversation in recentChat %}
                         {% set isSender = (conversation.sender.id == app.user.id) %}
                         {% set userId = isSender ? conversation.receiver.id : conversation.sender.id %}
@@ -85,6 +86,7 @@
                         {% else %}
                         <p class="text-center text-muted">Aucune conversation récente</p>
                     {% endfor %}
+                {% endif %}
 
                 </div>
             </div>

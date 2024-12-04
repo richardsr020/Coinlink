@@ -37,11 +37,13 @@ class DashboardController extends AbstractController
 
         // Récupérer les notifications de l'utilisateur
         $notifications = $this->notificationService->getNotifications($user);
+        $messageCounter = $this->dashboardService->countRecentsMessages($user);
+
        
         // Appeler le service pour obtenir les données du dashboard
         $dashboardData = $this->dashboardService->getUserDashboardData($user);
         $unpaidLoan = $this->loanService->checkUnpaidLoans($user);
-        //dd($dashboardData);
+        //dd($messageCounter);
        
         if($dashboardData['userInfo']['isLocked']){
 
@@ -58,7 +60,7 @@ class DashboardController extends AbstractController
 
             //recuperation de la somme due
             $dueAmount = $unpaidLoan->getAmount();
-        
+           
             if($dueDaysInterval == 0)
             {
                 try {
@@ -84,7 +86,8 @@ class DashboardController extends AbstractController
             'dashboard' => $dashboardData,
             'notifications' => $notifications,
             'dueDaysInterval' => $dueDaysInterval,
-            'dueAmount' => $dueAmount
+            'dueAmount' => $dueAmount,
+            'recentMessageCounter' => $messageCounter
         ]);
     }
 

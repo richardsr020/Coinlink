@@ -60,9 +60,6 @@ class TransactionController extends AbstractController
             // Stocke les données dans la session
             $session->set('transfer_data', $data);
 
-            // Ajoute un message flash de confirmation
-            $this->addFlash('success', 'Les données de transfert ont été enregistrées avec succès.');
-
             // Redirige ou traite selon vos besoins
             return $this->redirectToRoute('app_transfer_confirm');
         }
@@ -203,7 +200,7 @@ class TransactionController extends AbstractController
 
                     $this->addFlash('success', 'Transfert effectué avec succès.');
                     return $this->redirectToRoute('app_dashboard');
-                } catch (\InvalidArgumentException $e) {
+                } catch (\Exception $e) {
                     // Gérer les fonds insuffisants ou autres erreurs levées
                     $this->addFlash('error', $e->getMessage());
                     return $this->redirectToRoute('app_transfer');
@@ -261,7 +258,7 @@ class TransactionController extends AbstractController
         // Récupère les données de transfert depuis la session
         $data = $session->get('withdraw_data');
         if (!$data) {
-            $this->addFlash('error', 'Les données de retrait sont introuvables. Veuillez recommencer.');
+            $this->addFlash('error', 'veuillez renseigner les informations de retrait.');
             return $this->redirectToRoute('app_withdraw');
         }
 
@@ -307,7 +304,7 @@ class TransactionController extends AbstractController
         // Récupère les données de transfert
         $transferData = $session->get('withdraw_data');
         if (!$transferData) {
-            $this->addFlash('error', 'Les données de retrait sont introuvables. Veuillez recommencer.');
+            $this->addFlash('error', 'veuillez renseigner les informations de retrait');
             return $this->redirectToRoute('app_withdraw');
         }
 

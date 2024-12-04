@@ -105,21 +105,21 @@ class ChatController extends AbstractController
         $lastMessage = $this->chatService->getLastMessagesByUser($currentUserId);
         //dd($lastMessage);
         if ($lastMessage) {
-            return [
-                'recentChat' => [
-                    'id' => $lastMessage[1]->getId(),
-                    'sender' => $lastMessage[1]->getSender(),
-                    'receiver' => $lastMessage[1]->getReceiver(),
-                    'content' => $lastMessage[1]->getContent(),
-                    'createdAt' => $lastMessage[1]->getCreatedAt()->format('Y-m-d H:i:s'),
-                ],
-            ];
+
+            return $lastMessage;
+            // return [
+            //     'recentChat' => [
+            //         'id' => $lastMessage[1]->getId(),
+            //         'sender' => $lastMessage[1]->getSender(),
+            //         'receiver' => $lastMessage[1]->getReceiver(),
+            //         'content' => $lastMessage[1]->getContent(),
+            //         'createdAt' => $lastMessage[1]->getCreatedAt()->format('Y-m-d H:i:s'),
+            //     ],
+            // ];
         }
 
         // Retourne une réponse standard pour non trouvé
-        return [
-            'recentChat' => '',
-        ];
+        return $lastMessage;
     }
     /**
      * 
@@ -145,6 +145,7 @@ class ChatController extends AbstractController
             $user = $this->chatService->getUserByEmail($data->getEmail());
 
             $recentChat = $this->getLastMessageByConversationId($currentUserId);
+            
 
             if ($user) {
                 // Si l'utilisateur est trouvé, affiche ses informations
