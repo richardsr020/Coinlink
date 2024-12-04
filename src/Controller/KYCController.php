@@ -30,7 +30,8 @@ class KYCController extends AbstractController
         $user = $this->getUser(); // Charge l'utilisateur actuel
 
         if (!$user) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour soumettre vos informations KYC.');
+            $this->addFlash('error', 'veuillez vous connecter avant la verification KYC');
+            return $this->redirectToRoute('app_login');
         }
 
         if ($user->getPhone()) {
@@ -54,10 +55,10 @@ class KYCController extends AbstractController
             $phone = $data->getPhone(); // Champ "phone" dans le formulaire
 
             try {
-                $formattedPhone = $phone; //$this->countryService->formatPhoneNumberWithCountryCode();
+                $formattedPhone = $phone;//$this->countryService->formatPhoneNumberWithCountryCode($country, $phone);
                 $user->setPhone($formattedPhone);
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Erreur lors du formatage du numéro de téléphone : ' . $e->getMessage());
+                $this->addFlash('error', $e->getMessage());
                 return $this->redirectToRoute('app_kyc_form');
             }
 
